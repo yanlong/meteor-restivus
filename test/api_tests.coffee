@@ -90,7 +90,37 @@ if Meteor.isServer
           test.equal response.message, 'API endpoint not found'
           next()
 
-#    describe 'A route', ->
+    describe 'An endpoint', ->
+      it 'should have access to multiple query params', (test, next) ->
+        Restivus.addRoute 'mult-query-params',
+          get: ->
+            test.equal @queryParams.key1, '1234'
+            test.equal @queryParams.key2, 'abcd'
+            test.equal @queryParams.key3, 'a1b2'
+            true
+
+
+        HTTP.get 'http://localhost:3000/api/v1/mult-query-params?key1=1234&key2=abcd&key3=a1b2', (error, result) ->
+          test.isTrue result
+          next()
+
+    describe 'A collection endpoint', ->
+      it 'should have access to multiple query params', (test, next) ->
+        Restivus.addCollection new Mongo.Collection('TestQueryParams'),
+          path: 'mult-query-params-2'
+          endpoints:
+            getAll:
+              action: ->
+                test.equal @queryParams.key1, '1234'
+                test.equal @queryParams.key2, 'abcd'
+                test.equal @queryParams.key3, 'a1b2'
+                true
+
+
+        HTTP.get 'http://localhost:3000/api/v1/mult-query-params-2?key1=1234&key2=abcd&key3=a1b2', (error, result) ->
+          test.isTrue result
+          next()
+
 #      context 'that has been authenticated', ->
 #        it 'should have access to this.user and this.userId', (test) ->
 
