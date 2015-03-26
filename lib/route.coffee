@@ -52,7 +52,7 @@ class @Route
         # Generate and return the http response, handling the different endpoint response types
         if responseData.body and (responseData.statusCode or responseData.headers)
           responseData.statusCode or= 200
-          responseData.headers or= {'Content-Type': 'text/json'}
+          responseData.headers or= {'Content-Type': 'text/json; charset=utf-8'}
           self._respond this, responseData.body, responseData.statusCode, responseData.headers
         else
           self._respond this, responseData
@@ -193,7 +193,7 @@ class @Route
 
     # Ensure that a content type is set (will be overridden if also included in given headers)
     # TODO: Consider enforcing a text/json-only content type (override any user-defined content-type)
-    endpointContext.response.setHeader 'Content-Type', 'text/json'
+    endpointContext.response.setHeader 'Content-Type', 'text/json; charset=utf-8'
 
     # Prettify JSON if configured in API
     if @api.config.prettyJson
