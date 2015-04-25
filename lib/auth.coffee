@@ -8,6 +8,7 @@ userValidator = Match.Where (user) ->
     id: Match.Optional String
     username: Match.Optional String
     email: Match.Optional String
+    phone: Match.Optional String
 
   if _.keys(user).length is not 1
     throw new Match.Error 'User must have exactly one identifier field'
@@ -25,6 +26,8 @@ getUserQuerySelector = (user) ->
     return {'username': user.username}
   else if user.email
     return {'emails.address': user.email}
+  else if user.phone
+    return {'profile.phone': user.phone}
 
   # We shouldn't be here if the user object was properly validated
   throw new Error 'Cannot create selector from invalid user'
