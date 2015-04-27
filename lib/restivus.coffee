@@ -192,7 +192,10 @@ class @Restivus
     get: (collection) ->
       get:
         action: ->
-          entity = collection.findOne @urlParams.id, fields: profile: 1
+          entity = collection.findOne @urlParams.id, fields: 
+                                                        profile: 1
+                                                        username: 1
+                                                        'profile.portrait': 1
           if entity
             {status: "success", data: entity}
           else
