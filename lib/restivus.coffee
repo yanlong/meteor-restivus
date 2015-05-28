@@ -196,6 +196,7 @@ class @Restivus
                                                         profile: 1
                                                         username: 1
                                                         'profile.portrait': 1
+                                                        fortune: 1
           if entity
             {status: "success", data: entity}
           else
