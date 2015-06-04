@@ -205,9 +205,28 @@ class @Restivus
     put: (collection) ->
       put:
         action: ->
-          entityIsUpdated = collection.update @urlParams.id, $set: profile: @bodyParams
+          rules = 
+            sex: Match.Optional(Match.OneOf('male', 'female'))
+            portrait: Match.Optional(String)
+            username: Match.Optional(String)
+          check @bodyParams, rules
+          if @bodyParams.username
+            user = collection.findOne username: @bodyParams.username
+            if user
+              ret = 
+                statusCode: 404
+                body: 
+                  status: "fail"
+                  code: 1002
+                  message: "Username already exists"
+              return ret
+          $set = {}
+          $set['username'] = @bodyParams.username if  @bodyParams.username
+          $set['profile.sex'] = @bodyParams.sex if  @bodyParams.sex
+          $set['profile.portrait'] = @bodyParams.portrait if  @bodyParams.portrait
+          entityIsUpdated = collection.update @urlParams.id, $set: $set
           if entityIsUpdated
-            entity = collection.findOne @urlParams.id, fields: profile: 1
+            entity = collection.findOne @urlParams.id, fields: profile: 1, username:1
             {status: "success", data: entity}
           else
             statusCode: 404
