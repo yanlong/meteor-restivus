@@ -195,8 +195,9 @@ class @Restivus
           entity = collection.findOne @urlParams.id, fields: 
                                                         profile: 1
                                                         username: 1
-                                                        'profile.portrait': 1
+                                                        'profile': 1
                                                         fortune: 1
+          delete entity.profile.phone
           if entity
             {status: "success", data: entity}
           else
